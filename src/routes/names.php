@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Versia MVP
+ * MVP version
  */
 
 use Psr\Http\Message\ResponseInterface as Response;
