@@ -12,7 +12,7 @@ $app = AppFactory::create();
 
 $app->get('/api/v1/names', function (Request $request, Response $response) {
 
-	$sql = "SELECT * FROM `names-and-all-quantity2`";
+	$sql = "SELECT * FROM `names-and-all-quantity`";
 	return getResponseBySQLQuery($sql, $response);
 });
 
