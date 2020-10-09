@@ -29,12 +29,28 @@ function getResponseBySQLQuery(string $sql, Response $response)
 		$db = $db->connect();
 
 		$stmt = $db->query($sql);
-		$names = $stmt->fetchAll(PDO::FETCH_OBJ);
+		$data = $stmt->fetchAll(PDO::FETCH_OBJ);
 		$db = null;
-		$response->getBody()->write('{"status": 200, "message": "OK", "data": ' . json_encode($names) . ', "data-version": "' . $_ENV['DATA_VERSION'] . '" }');
+
+		$dataJSON = json_encode($data, JSON_FORCE_OBJECT);
+		if (json_last_error_msg() === "No error") {
+			setSuccessResponse($dataJSON, $response);
+		} else {
+			setErrorResponse(500, "JSON encode problem: " . json_last_error_msg(), $response);
+		}
 	} catch (PDOException $e) {
-		$response->getBody()->write('{"status": 500, "message": "' . $e->getMessage() . '"}');
+		setErrorResponse(500, $e->getMessage(), $response);
 	}
 
 	return $response;
+}
+
+function setSuccessResponse(string $dataJSON, Response $response)
+{
+	$response->getBody()->write('{"status": 200, "message": "OK", "data": ' . $dataJSON . ', "data-version": "' . $_ENV['DATA_VERSION'] . '" }');
+}
+
+function setErrorResponse(int $status, string $message, Response $response)
+{
+	$response->getBody()->write('{"status": ' . $status . ', "message": "' . $message . '"}');
 }
