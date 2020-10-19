@@ -32,7 +32,7 @@ function getResponseBySQLQuery(string $sql, Response $response)
 		$data = $stmt->fetchAll(PDO::FETCH_OBJ);
 		$db = null;
 
-		$dataJSON = json_encode($data, JSON_FORCE_OBJECT);
+		$dataJSON = json_encode($data);
 		if (json_last_error_msg() === "No error") {
 			setSuccessResponse($dataJSON, $response);
 		} else {
