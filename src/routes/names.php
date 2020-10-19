@@ -41,7 +41,9 @@ function getResponseBySQLQuery(string $sql, Response $response)
 	} catch (PDOException $e) {
 		setErrorResponse(500, $e->getMessage(), $response);
 	}
-
+	
+	$response = $response->withHeader('Content-Type', 'application/json');
+	$response = $response->withHeader('Access-Control-Allow-Origin', '*');
 	return $response;
 }
 
